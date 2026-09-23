@@ -4,6 +4,7 @@ metadata:
   name: xev
 spec:
   image: ghcr.io/xe/xev:latest
+  autoUpdate: true
   replicas: 1
   port: 50051
   volumes:
