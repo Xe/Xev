@@ -1,0 +1,18 @@
+[project]
+name = "xev"
+version = "0.1.0"
+description = "A small local decision service based on NobodyWho's Jev example"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "grpcio>=1.66,<2",
+    "huggingface-hub>=0.25,<1",
+    "llama-cpp-python>=0.3,<1",
+    "numpy>=1.26,<3",
+    "protobuf>=5,<7",
+]
+
+[dependency-groups]
+dev = ["grpcio-tools>=1.66,<2", "pytest>=8,<9"]
+
+[tool.uv]
+package = false

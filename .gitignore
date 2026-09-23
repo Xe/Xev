@@ -1,0 +1,8 @@
+.venv/
+.uv-cache/
+.buf-cache/
+.model-cache/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.coverage

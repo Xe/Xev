@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package xeiaso.net.xev.v1;
+
+import "google/protobuf/duration.proto";
+
+service DecisionService {
+  rpc Pick(PickRequest) returns (PickResponse) {}
+}
+
+enum Model {
+  MODEL_UNSPECIFIED = 0;
+  MODEL_QWEN3_600M = 1;
+}
+
+message PickRequest {
+  string context = 1;
+  string question = 2;
+  repeated string options = 3;
+  Model model = 4;
+}
+
+message PickResponse {
+  google.protobuf.Duration execution_time = 1;
+  map<string, float> logits = 2;
+  map<string, float> log_probabilities = 3;
+  map<string, float> confidence = 4;
+}

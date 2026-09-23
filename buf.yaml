@@ -1,0 +1,15 @@
+version: v2
+modules:
+  - path: .
+    excludes:
+      - .uv-cache
+      - .venv
+lint:
+  use:
+    - STANDARD
+  except:
+    - PACKAGE_DIRECTORY_MATCH
+    - PACKAGE_VERSION_SUFFIX
+breaking:
+  use:
+    - FILE
