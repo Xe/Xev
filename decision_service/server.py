@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import os
+import threading
 import time
 from concurrent import futures
 
 import grpc
 import protovalidate
+import uuid6
 from google.protobuf.duration_pb2 import Duration
 from grpc_health.v1 import health, health_pb2, health_pb2_grpc
 
@@ -20,15 +22,24 @@ SERVICE_NAME = decision_pb2.DESCRIPTOR.services_by_name["DecisionService"].full_
 class DecisionService(decision_pb2_grpc.DecisionServiceServicer):
     def __init__(self, classifier=None):
         self.classifier = classifier or Classifier()
+        self._request_id_lock = threading.Lock()
+
+    def _request_id(self, context):
+        with self._request_id_lock:
+            request_id = str(uuid6.uuid7())
+        context.set_trailing_metadata((("x-request-id", request_id),))
+        return request_id
 
     def Pick(self, request, context):
+        request_id = self._request_id(context)
         try:
             protovalidate.validate(request)
         except protovalidate.ValidationError as exc:
             context.abort(grpc.StatusCode.INVALID_ARGUMENT, str(exc))
-        return self._pick(request, context, decision_pb2.PickResponse)
+        return self._pick(request, context, decision_pb2.PickResponse, request_id)
 
     def Noul(self, request, context):
+        request_id = self._request_id(context)
         try:
             protovalidate.validate(request)
         except protovalidate.ValidationError as exc:
@@ -42,9 +53,10 @@ class DecisionService(decision_pb2_grpc.DecisionServiceServicer):
             ),
             context,
             decision_pb2.NoulResponse,
+            request_id,
         )
 
-    def _pick(self, request, context, response_type):
+    def _pick(self, request, context, response_type, request_id):
         options = list(request.options)
         start = time.perf_counter()
         try:
@@ -61,6 +73,7 @@ class DecisionService(decision_pb2_grpc.DecisionServiceServicer):
             logits=logits,
             log_probabilities=log_probabilities,
             confidence=confidence,
+            request_id=request_id,
         )
 
 

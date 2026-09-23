@@ -56,7 +56,9 @@ the first `Pick` request can still take time to download and load the model.
 Send a `PickRequest` with `context`, `question`, and `options`. The response
 contains raw `logits`, normalized `log_probabilities`, and `confidence` for the
 options in the request. `execution_time` includes model load time on the first
-request.
+request. Each successful response includes a UUIDv7 `request_id`. Every
+`Pick` and `Noul` call also returns that ID as `x-request-id` gRPC trailing
+metadata, including calls that fail validation.
 
 Use `Noul` with a `NoulRequest` to score the fixed options `yes` and `no`.
 Its `NoulResponse` has the same fields as `PickResponse`. Both RPCs use

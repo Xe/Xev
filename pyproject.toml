@@ -11,6 +11,7 @@ dependencies = [
     "numpy>=1.26,<3",
     "protobuf>=5,<7",
     "protovalidate>=1.2,<2",
+    "uuid6>=2025.0.1,<2026",
 ]
 
 [dependency-groups]

@@ -1,3 +1,5 @@
+import uuid
+
 import grpc
 import pytest
 from gnostic.openapi.v3 import annotations_pb2 as openapi_annotations
@@ -37,7 +39,7 @@ def stub(server_channel):
 
 
 def test_pick_over_grpc(stub):
-    response = stub.Pick(
+    response, call = stub.Pick.with_call(
         decision_pb2.PickRequest(
             context="Payroll email",
             question="What kind of message is this?",
@@ -48,6 +50,8 @@ def test_pick_over_grpc(stub):
     assert response.confidence["Phishing"] == pytest.approx(0.73)
     assert response.logits["Legitimate"] == pytest.approx(1.0)
     assert response.execution_time.ToNanoseconds() >= 0
+    assert uuid.UUID(response.request_id).version == 7
+    assert dict(call.trailing_metadata())["x-request-id"] == response.request_id
 
 
 @pytest.mark.parametrize(
@@ -67,10 +71,11 @@ def test_invalid_request(stub, pick_request):
     with pytest.raises(grpc.RpcError) as exc:
         stub.Pick(pick_request)
     assert exc.value.code() == grpc.StatusCode.INVALID_ARGUMENT
+    assert uuid.UUID(dict(exc.value.trailing_metadata())["x-request-id"]).version == 7
 
 
 def test_noul_uses_yes_and_no(stub):
-    response = stub.Noul(
+    response, call = stub.Noul.with_call(
         decision_pb2.NoulRequest(
             context="Payroll email",
             question="What kind of message is this?",
@@ -79,6 +84,8 @@ def test_noul_uses_yes_and_no(stub):
     assert isinstance(response, decision_pb2.NoulResponse)
     assert response.confidence["yes"] == pytest.approx(0.27)
     assert response.confidence["no"] == pytest.approx(0.73)
+    assert uuid.UUID(response.request_id).version == 7
+    assert dict(call.trailing_metadata())["x-request-id"] == response.request_id
 
 
 def test_http_and_openapi_annotations():
@@ -111,6 +118,7 @@ def test_invalid_noul_request(stub, noul_request):
     with pytest.raises(grpc.RpcError) as exc:
         stub.Noul(noul_request)
     assert exc.value.code() == grpc.StatusCode.INVALID_ARGUMENT
+    assert uuid.UUID(dict(exc.value.trailing_metadata())["x-request-id"]).version == 7
 
 
 def test_grpc_health_check(server_channel):

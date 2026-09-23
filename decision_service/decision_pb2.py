@@ -28,7 +28,7 @@ from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
 from google.protobuf import duration_pb2 as google_dot_protobuf_dot_duration__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1f\x64\x65\x63ision_service/decision.proto\x12\x11xeiaso.net.xev.v1\x1a\x1b\x62uf/validate/validate.proto\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\"\xd1\x01\n\x0bPickRequest\x12!\n\x07\x63ontext\x18\x01 \x01(\tB\x07\xbaH\x04r\x02\x10\x01R\x07\x63ontext\x12-\n\x08question\x18\x02 \x01(\tB\x11\xbaH\x0er\x0c\x32\n(?s).*\\S.*R\x08question\x12\x36\n\x07options\x18\x03 \x03(\tB\x1c\xbaH\x19\x92\x01\x16\x08\x02\x10\x1a\x18\x01\"\x0er\x0c\x32\n(?s).*\\S.*R\x07options\x12\x38\n\x05model\x18\x04 \x01(\x0e\x32\x18.xeiaso.net.xev.v1.ModelB\x08\xbaH\x05\x82\x01\x02\x10\x01R\x05model\"\x99\x01\n\x0bNoulRequest\x12!\n\x07\x63ontext\x18\x01 \x01(\tB\x07\xbaH\x04r\x02\x10\x01R\x07\x63ontext\x12-\n\x08question\x18\x02 \x01(\tB\x11\xbaH\x0er\x0c\x32\n(?s).*\\S.*R\x08question\x12\x38\n\x05model\x18\x03 \x01(\x0e\x32\x18.xeiaso.net.xev.v1.ModelB\x08\xbaH\x05\x82\x01\x02\x10\x01R\x05model\"\x89\x04\n\x0cPickResponse\x12@\n\x0e\x65xecution_time\x18\x01 \x01(\x0b\x32\x19.google.protobuf.DurationR\rexecutionTime\x12\x43\n\x06logits\x18\x02 \x03(\x0b\x32+.xeiaso.net.xev.v1.PickResponse.LogitsEntryR\x06logits\x12\x62\n\x11log_probabilities\x18\x03 \x03(\x0b\x32\x35.xeiaso.net.xev.v1.PickResponse.LogProbabilitiesEntryR\x10logProbabilities\x12O\n\nconfidence\x18\x04 \x03(\x0b\x32/.xeiaso.net.xev.v1.PickResponse.ConfidenceEntryR\nconfidence\x1a\x39\n\x0bLogitsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x02R\x05value:\x02\x38\x01\x1a\x43\n\x15LogProbabilitiesEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x02R\x05value:\x02\x38\x01\x1a=\n\x0f\x43onfidenceEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x02R\x05value:\x02\x38\x01\"\x89\x04\n\x0cNoulResponse\x12@\n\x0e\x65xecution_time\x18\x01 \x01(\x0b\x32\x19.google.protobuf.DurationR\rexecutionTime\x12\x43\n\x06logits\x18\x02 \x03(\x0b\x32+.xeiaso.net.xev.v1.NoulResponse.LogitsEntryR\x06logits\x12\x62\n\x11log_probabilities\x18\x03 \x03(\x0b\x32\x35.xeiaso.net.xev.v1.NoulResponse.LogProbabilitiesEntryR\x10logProbabilities\x12O\n\nconfidence\x18\x04 \x03(\x0b\x32/.xeiaso.net.xev.v1.NoulResponse.ConfidenceEntryR\nconfidence\x1a\x39\n\x0bLogitsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x02R\x05value:\x02\x38\x01\x1a\x43\n\x15LogProbabilitiesEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x02R\x05value:\x02\x38\x01\x1a=\n\x0f\x43onfidenceEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x02R\x05value:\x02\x38\x01*4\n\x05Model\x12\x15\n\x11MODEL_UNSPECIFIED\x10\x00\x12\x14\n\x10MODEL_QWEN3_600M\x10\x01\x32\xba\x02\n\x0f\x44\x65\x63isionService\x12\x97\x01\n\x04Pick\x12\x1e.xeiaso.net.xev.v1.PickRequest\x1a\x1f.xeiaso.net.xev.v1.PickResponse\"N\xbaG0\n\x08\x44\x65\x63ision\x12\x16Score decision options*\x0cpickDecision\x82\xd3\xe4\x93\x02\x15\"\x10/v1/xev/decision:\x01*\x12\x8c\x01\n\x04Noul\x12\x1e.xeiaso.net.xev.v1.NoulRequest\x1a\x1f.xeiaso.net.xev.v1.NoulResponse\"C\xbaG)\n\x08\x44\x65\x63ision\x12\x0fScore yes or no*\x0cnoulDecision\x82\xd3\xe4\x93\x02\x11\"\x0c/v1/xev/noul:\x01*BP\xbaGM\x12K\n\x10Xev Decision API\x12\x33Score decision options with a local language model.2\x02v1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1f\x64\x65\x63ision_service/decision.proto\x12\x11xeiaso.net.xev.v1\x1a\x1b\x62uf/validate/validate.proto\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\"\xd1\x01\n\x0bPickRequest\x12!\n\x07\x63ontext\x18\x01 \x01(\tB\x07\xbaH\x04r\x02\x10\x01R\x07\x63ontext\x12-\n\x08question\x18\x02 \x01(\tB\x11\xbaH\x0er\x0c\x32\n(?s).*\\S.*R\x08question\x12\x36\n\x07options\x18\x03 \x03(\tB\x1c\xbaH\x19\x92\x01\x16\x08\x02\x10\x1a\x18\x01\"\x0er\x0c\x32\n(?s).*\\S.*R\x07options\x12\x38\n\x05model\x18\x04 \x01(\x0e\x32\x18.xeiaso.net.xev.v1.ModelB\x08\xbaH\x05\x82\x01\x02\x10\x01R\x05model\"\x99\x01\n\x0bNoulRequest\x12!\n\x07\x63ontext\x18\x01 \x01(\tB\x07\xbaH\x04r\x02\x10\x01R\x07\x63ontext\x12-\n\x08question\x18\x02 \x01(\tB\x11\xbaH\x0er\x0c\x32\n(?s).*\\S.*R\x08question\x12\x38\n\x05model\x18\x03 \x01(\x0e\x32\x18.xeiaso.net.xev.v1.ModelB\x08\xbaH\x05\x82\x01\x02\x10\x01R\x05model\"\xb2\x04\n\x0cPickResponse\x12@\n\x0e\x65xecution_time\x18\x01 \x01(\x0b\x32\x19.google.protobuf.DurationR\rexecutionTime\x12\x43\n\x06logits\x18\x02 \x03(\x0b\x32+.xeiaso.net.xev.v1.PickResponse.LogitsEntryR\x06logits\x12\x62\n\x11log_probabilities\x18\x03 \x03(\x0b\x32\x35.xeiaso.net.xev.v1.PickResponse.LogProbabilitiesEntryR\x10logProbabilities\x12O\n\nconfidence\x18\x04 \x03(\x0b\x32/.xeiaso.net.xev.v1.PickResponse.ConfidenceEntryR\nconfidence\x12\'\n\nrequest_id\x18\x05 \x01(\tB\x08\xbaH\x05r\x03\xb0\x01\x01R\trequestId\x1a\x39\n\x0bLogitsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x02R\x05value:\x02\x38\x01\x1a\x43\n\x15LogProbabilitiesEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x02R\x05value:\x02\x38\x01\x1a=\n\x0f\x43onfidenceEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x02R\x05value:\x02\x38\x01\"\xb2\x04\n\x0cNoulResponse\x12@\n\x0e\x65xecution_time\x18\x01 \x01(\x0b\x32\x19.google.protobuf.DurationR\rexecutionTime\x12\x43\n\x06logits\x18\x02 \x03(\x0b\x32+.xeiaso.net.xev.v1.NoulResponse.LogitsEntryR\x06logits\x12\x62\n\x11log_probabilities\x18\x03 \x03(\x0b\x32\x35.xeiaso.net.xev.v1.NoulResponse.LogProbabilitiesEntryR\x10logProbabilities\x12O\n\nconfidence\x18\x04 \x03(\x0b\x32/.xeiaso.net.xev.v1.NoulResponse.ConfidenceEntryR\nconfidence\x12\'\n\nrequest_id\x18\x05 \x01(\tB\x08\xbaH\x05r\x03\xb0\x01\x01R\trequestId\x1a\x39\n\x0bLogitsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x02R\x05value:\x02\x38\x01\x1a\x43\n\x15LogProbabilitiesEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x02R\x05value:\x02\x38\x01\x1a=\n\x0f\x43onfidenceEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x02R\x05value:\x02\x38\x01*4\n\x05Model\x12\x15\n\x11MODEL_UNSPECIFIED\x10\x00\x12\x14\n\x10MODEL_QWEN3_600M\x10\x01\x32\xba\x02\n\x0f\x44\x65\x63isionService\x12\x97\x01\n\x04Pick\x12\x1e.xeiaso.net.xev.v1.PickRequest\x1a\x1f.xeiaso.net.xev.v1.PickResponse\"N\xbaG0\n\x08\x44\x65\x63ision\x12\x16Score decision options*\x0cpickDecision\x82\xd3\xe4\x93\x02\x15\"\x10/v1/xev/decision:\x01*\x12\x8c\x01\n\x04Noul\x12\x1e.xeiaso.net.xev.v1.NoulRequest\x1a\x1f.xeiaso.net.xev.v1.NoulResponse\"C\xbaG)\n\x08\x44\x65\x63ision\x12\x0fScore yes or no*\x0cnoulDecision\x82\xd3\xe4\x93\x02\x11\"\x0c/v1/xev/noul:\x01*BP\xbaGM\x12K\n\x10Xev Decision API\x12\x33Score decision options with a local language model.2\x02v1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -56,38 +56,42 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_PICKRESPONSE_LOGPROBABILITIESENTRY']._serialized_options = b'8\001'
   _globals['_PICKRESPONSE_CONFIDENCEENTRY']._loaded_options = None
   _globals['_PICKRESPONSE_CONFIDENCEENTRY']._serialized_options = b'8\001'
+  _globals['_PICKRESPONSE'].fields_by_name['request_id']._loaded_options = None
+  _globals['_PICKRESPONSE'].fields_by_name['request_id']._serialized_options = b'\272H\005r\003\260\001\001'
   _globals['_NOULRESPONSE_LOGITSENTRY']._loaded_options = None
   _globals['_NOULRESPONSE_LOGITSENTRY']._serialized_options = b'8\001'
   _globals['_NOULRESPONSE_LOGPROBABILITIESENTRY']._loaded_options = None
   _globals['_NOULRESPONSE_LOGPROBABILITIESENTRY']._serialized_options = b'8\001'
   _globals['_NOULRESPONSE_CONFIDENCEENTRY']._loaded_options = None
   _globals['_NOULRESPONSE_CONFIDENCEENTRY']._serialized_options = b'8\001'
+  _globals['_NOULRESPONSE'].fields_by_name['request_id']._loaded_options = None
+  _globals['_NOULRESPONSE'].fields_by_name['request_id']._serialized_options = b'\272H\005r\003\260\001\001'
   _globals['_DECISIONSERVICE'].methods_by_name['Pick']._loaded_options = None
   _globals['_DECISIONSERVICE'].methods_by_name['Pick']._serialized_options = b'\272G0\n\010Decision\022\026Score decision options*\014pickDecision\202\323\344\223\002\025\"\020/v1/xev/decision:\001*'
   _globals['_DECISIONSERVICE'].methods_by_name['Noul']._loaded_options = None
   _globals['_DECISIONSERVICE'].methods_by_name['Noul']._serialized_options = b'\272G)\n\010Decision\022\017Score yes or no*\014noulDecision\202\323\344\223\002\021\"\014/v1/xev/noul:\001*'
-  _globals['_MODEL']._serialized_start=1599
-  _globals['_MODEL']._serialized_end=1651
+  _globals['_MODEL']._serialized_start=1681
+  _globals['_MODEL']._serialized_end=1733
   _globals['_PICKREQUEST']._serialized_start=184
   _globals['_PICKREQUEST']._serialized_end=393
   _globals['_NOULREQUEST']._serialized_start=396
   _globals['_NOULREQUEST']._serialized_end=549
   _globals['_PICKRESPONSE']._serialized_start=552
-  _globals['_PICKRESPONSE']._serialized_end=1073
-  _globals['_PICKRESPONSE_LOGITSENTRY']._serialized_start=884
-  _globals['_PICKRESPONSE_LOGITSENTRY']._serialized_end=941
-  _globals['_PICKRESPONSE_LOGPROBABILITIESENTRY']._serialized_start=943
-  _globals['_PICKRESPONSE_LOGPROBABILITIESENTRY']._serialized_end=1010
-  _globals['_PICKRESPONSE_CONFIDENCEENTRY']._serialized_start=1012
-  _globals['_PICKRESPONSE_CONFIDENCEENTRY']._serialized_end=1073
-  _globals['_NOULRESPONSE']._serialized_start=1076
-  _globals['_NOULRESPONSE']._serialized_end=1597
-  _globals['_NOULRESPONSE_LOGITSENTRY']._serialized_start=884
-  _globals['_NOULRESPONSE_LOGITSENTRY']._serialized_end=941
-  _globals['_NOULRESPONSE_LOGPROBABILITIESENTRY']._serialized_start=943
-  _globals['_NOULRESPONSE_LOGPROBABILITIESENTRY']._serialized_end=1010
-  _globals['_NOULRESPONSE_CONFIDENCEENTRY']._serialized_start=1012
-  _globals['_NOULRESPONSE_CONFIDENCEENTRY']._serialized_end=1073
-  _globals['_DECISIONSERVICE']._serialized_start=1654
-  _globals['_DECISIONSERVICE']._serialized_end=1968
+  _globals['_PICKRESPONSE']._serialized_end=1114
+  _globals['_PICKRESPONSE_LOGITSENTRY']._serialized_start=925
+  _globals['_PICKRESPONSE_LOGITSENTRY']._serialized_end=982
+  _globals['_PICKRESPONSE_LOGPROBABILITIESENTRY']._serialized_start=984
+  _globals['_PICKRESPONSE_LOGPROBABILITIESENTRY']._serialized_end=1051
+  _globals['_PICKRESPONSE_CONFIDENCEENTRY']._serialized_start=1053
+  _globals['_PICKRESPONSE_CONFIDENCEENTRY']._serialized_end=1114
+  _globals['_NOULRESPONSE']._serialized_start=1117
+  _globals['_NOULRESPONSE']._serialized_end=1679
+  _globals['_NOULRESPONSE_LOGITSENTRY']._serialized_start=925
+  _globals['_NOULRESPONSE_LOGITSENTRY']._serialized_end=982
+  _globals['_NOULRESPONSE_LOGPROBABILITIESENTRY']._serialized_start=984
+  _globals['_NOULRESPONSE_LOGPROBABILITIESENTRY']._serialized_end=1051
+  _globals['_NOULRESPONSE_CONFIDENCEENTRY']._serialized_start=1053
+  _globals['_NOULRESPONSE_CONFIDENCEENTRY']._serialized_end=1114
+  _globals['_DECISIONSERVICE']._serialized_start=1736
+  _globals['_DECISIONSERVICE']._serialized_end=2050
 # @@protoc_insertion_point(module_scope)
