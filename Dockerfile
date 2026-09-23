@@ -17,6 +17,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y libgomp1 \
 WORKDIR /app
 COPY --from=build /app/.venv /app/.venv
 COPY buf ./buf
+COPY gnostic ./gnostic
+COPY google ./google
 COPY decision_service ./decision_service
 RUN mkdir -p /app/.cache/huggingface && chown -R app:app /app
 

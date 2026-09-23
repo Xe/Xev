@@ -63,6 +63,11 @@ Its `NoulResponse` has the same fields as `PickResponse`. Both RPCs use
 Protovalidate rules from the protobuf schema. The context must be non-empty.
 Invalid requests return `INVALID_ARGUMENT`.
 
+The protobuf schema maps `Pick` to `POST /v1/xev/decision` and `Noul` to
+`POST /v1/xev/noul` with JSON request bodies. Gnostic OpenAPI v3 annotations
+provide document and operation metadata for OpenAPI generators. This service
+serves gRPC; an HTTP router can use those annotations to expose the routes.
+
 The model scores one token per option: `A`, `B`, and so on. Confidence values
 sum to one across the supplied options. They are model scores, not measured
 accuracy or calibrated confidence.
@@ -70,7 +75,8 @@ accuracy or calibrated confidence.
 For a command-line request, use `grpcurl` from the project root:
 
 ```sh
-grpcurl -plaintext -import-path . -proto decision_service/decision.proto \
+buf build --as-file-descriptor-set -o /tmp/xev.protoset
+grpcurl -plaintext -protoset /tmp/xev.protoset \
   -d '{"context":"Payroll asks for your password on a non-company sign-in page.","question":"What kind of email is this?","options":["Legitimate","Spam","Phishing"]}' \
   localhost:50051 xeiaso.net.xev.v1.DecisionService/Pick
 ```

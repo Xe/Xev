@@ -1,5 +1,7 @@
 import grpc
 import pytest
+from gnostic.openapi.v3 import annotations_pb2 as openapi_annotations
+from google.api import annotations_pb2 as http_annotations
 from grpc_health.v1 import health_pb2, health_pb2_grpc
 
 from decision_service import decision_pb2, decision_pb2_grpc
@@ -77,6 +79,23 @@ def test_noul_uses_yes_and_no(stub):
     assert isinstance(response, decision_pb2.NoulResponse)
     assert response.confidence["yes"] == pytest.approx(0.27)
     assert response.confidence["no"] == pytest.approx(0.73)
+
+
+def test_http_and_openapi_annotations():
+    service = decision_pb2.DESCRIPTOR.services_by_name["DecisionService"]
+    document = decision_pb2.DESCRIPTOR.GetOptions().Extensions[
+        openapi_annotations.document
+    ]
+    assert document.info.title == "Xev Decision API"
+    assert document.info.version == "v1"
+    for method_name, route in (
+        ("Pick", "/v1/xev/decision"),
+        ("Noul", "/v1/xev/noul"),
+    ):
+        options = service.methods_by_name[method_name].GetOptions()
+        assert options.Extensions[http_annotations.http].post == route
+        assert options.Extensions[http_annotations.http].body == "*"
+        assert options.Extensions[openapi_annotations.operation].summary
 
 
 @pytest.mark.parametrize(

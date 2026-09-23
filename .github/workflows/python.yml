@@ -28,7 +28,7 @@ jobs:
           buf lint
           buf format -d --exit-code
           buf generate
-          git diff --exit-code -- buf/validate/validate_pb2.py decision_service/decision_pb2.py decision_service/decision_pb2_grpc.py
+          git diff --exit-code -- buf gnostic google decision_service/decision_pb2.py decision_service/decision_pb2_grpc.py
       - name: Run tests
         run: uv run --locked python -m pytest -q
 

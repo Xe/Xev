@@ -3,11 +3,41 @@ syntax = "proto3";
 package xeiaso.net.xev.v1;
 
 import "buf/validate/validate.proto";
+import "gnostic/openapi/v3/annotations.proto";
+import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
 
+option (gnostic.openapi.v3.document) = {
+  info: {
+    title: "Xev Decision API"
+    version: "v1"
+    description: "Score decision options with a local language model."
+  }
+};
+
 service DecisionService {
-  rpc Pick(PickRequest) returns (PickResponse) {}
-  rpc Noul(NoulRequest) returns (NoulResponse) {}
+  rpc Pick(PickRequest) returns (PickResponse) {
+    option (google.api.http) = {
+      post: "/v1/xev/decision"
+      body: "*"
+    };
+    option (gnostic.openapi.v3.operation) = {
+      summary: "Score decision options"
+      operation_id: "pickDecision"
+      tags: "Decision"
+    };
+  }
+  rpc Noul(NoulRequest) returns (NoulResponse) {
+    option (google.api.http) = {
+      post: "/v1/xev/noul"
+      body: "*"
+    };
+    option (gnostic.openapi.v3.operation) = {
+      summary: "Score yes or no"
+      operation_id: "noulDecision"
+      tags: "Decision"
+    };
+  }
 }
 
 enum Model {
