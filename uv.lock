@@ -110,6 +110,19 @@ wheels = [
 ]
 
 [[package]]
+name = "grpcio-health-checking"
+version = "1.81.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "grpcio" },
+    { name = "protobuf" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/65/46/6b6678b5a922765ae7637205bb6d0618a4da8b35f2ce6116f8bcff262370/grpcio_health_checking-1.81.1.tar.gz", hash = "sha256:ecc61480e25058a4a04e11e4ab6900ad7439b32e60a8ce4ece7d9f219221c85d", size = 17107, upload-time = "2026-06-11T12:58:49.632Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6e/87/174bbfb5613794862c45b5cdf567fcfb478ad5a3a7b594e11d998656b2f9/grpcio_health_checking-1.81.1-py3-none-any.whl", hash = "sha256:cbc6a4171825ec64389de2f062d296ba129a5c27eefd0dd55fa837909184bdf9", size = 19120, upload-time = "2026-06-11T12:58:38.008Z" },
+]
+
+[[package]]
 name = "grpcio-tools"
 version = "1.81.1"
 source = { registry = "https://pypi.org/simple" }
@@ -383,6 +396,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "grpcio" },
+    { name = "grpcio-health-checking" },
     { name = "huggingface-hub" },
     { name = "llama-cpp-python" },
     { name = "numpy" },
@@ -398,6 +412,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "grpcio", specifier = ">=1.66,<2" },
+    { name = "grpcio-health-checking", specifier = ">=1.66,<2" },
     { name = "huggingface-hub", specifier = ">=0.25,<1" },
     { name = "llama-cpp-python", specifier = ">=0.3,<1" },
     { name = "numpy", specifier = ">=1.26,<3" },

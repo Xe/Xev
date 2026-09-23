@@ -1,10 +1,9 @@
-from concurrent import futures
-
 import grpc
 import pytest
+from grpc_health.v1 import health_pb2, health_pb2_grpc
 
 from decision_service import decision_pb2, decision_pb2_grpc
-from decision_service.server import DecisionService
+from decision_service.server import SERVICE_NAME, create_server
 
 
 class FakeClassifier:
@@ -20,16 +19,19 @@ class FakeClassifier:
 
 
 @pytest.fixture
-def stub():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
-    decision_pb2_grpc.add_DecisionServiceServicer_to_server(
-        DecisionService(FakeClassifier()), server
-    )
+def server_channel():
+    server, health_service = create_server(FakeClassifier())
     port = server.add_insecure_port("127.0.0.1:0")
     server.start()
     with grpc.insecure_channel(f"127.0.0.1:{port}") as channel:
-        yield decision_pb2_grpc.DecisionServiceStub(channel)
+        yield channel, health_service
     server.stop(grace=0).wait()
+
+
+@pytest.fixture
+def stub(server_channel):
+    channel, _ = server_channel
+    return decision_pb2_grpc.DecisionServiceStub(channel)
 
 
 def test_pick_over_grpc(stub):
@@ -59,3 +61,19 @@ def test_invalid_request(stub, pick_request):
     with pytest.raises(grpc.RpcError) as exc:
         stub.Pick(pick_request)
     assert exc.value.code() == grpc.StatusCode.INVALID_ARGUMENT
+
+
+def test_grpc_health_check(server_channel):
+    channel, health_service = server_channel
+    stub = health_pb2_grpc.HealthStub(channel)
+    for service in ("", SERVICE_NAME):
+        response = stub.Check(health_pb2.HealthCheckRequest(service=service))
+        assert response.status == health_pb2.HealthCheckResponse.SERVING
+
+    with pytest.raises(grpc.RpcError) as exc:
+        stub.Check(health_pb2.HealthCheckRequest(service="unknown"))
+    assert exc.value.code() == grpc.StatusCode.NOT_FOUND
+
+    health_service.enter_graceful_shutdown()
+    response = stub.Check(health_pb2.HealthCheckRequest(service=""))
+    assert response.status == health_pb2.HealthCheckResponse.NOT_SERVING

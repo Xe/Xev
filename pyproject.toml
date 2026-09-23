@@ -5,6 +5,7 @@ description = "A small local decision service based on NobodyWho's Jev example"
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "grpcio>=1.66,<2",
+    "grpcio-health-checking>=1.66,<2",
     "huggingface-hub>=0.25,<1",
     "llama-cpp-python>=0.3,<1",
     "numpy>=1.26,<3",

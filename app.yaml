@@ -1,0 +1,16 @@
+apiVersion: x.within.website/v1
+kind: App
+metadata:
+  name: xev
+spec:
+  image: ghcr.io/xe/xev:latest
+  replicas: 1
+  port: 50051
+  volumes:
+    - name: model-cache
+      path: /app/.cache/huggingface
+      size: 2Gi
+  healthcheck:
+    enabled: true
+    kind: grpc
+    port: 50051

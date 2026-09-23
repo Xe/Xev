@@ -33,6 +33,20 @@ The volume keeps the model after the container stops. The image downloads the
 model on the first request. The gRPC port uses plaintext; place the service
 behind a TLS proxy when clients connect over an untrusted network.
 
+## Internal deployment
+
+[`app.yaml`](app.yaml) creates an internal Service on port `50051` with a gRPC
+health check. It mounts a 2 GiB PVC at the Hugging Face model cache path.
+The deployment uses one replica because the PVC uses `ReadWriteOnce` access.
+It does not enable public ingress. Publish the Docker image as
+`ghcr.io/xe/xev:latest` before you apply the manifest, or change `spec.image`
+to the image that you publish.
+
+The server reports `SERVING` for the empty service name and
+`xeiaso.net.xev.v1.DecisionService`. During shutdown, it reports
+`NOT_SERVING`. The health check confirms that the gRPC server accepts requests;
+the first `Pick` request can still take time to download and load the model.
+
 ## API
 
 Send a `PickRequest` with `context`, `question`, and `options`. The response
