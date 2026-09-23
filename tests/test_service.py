@@ -10,11 +10,11 @@ class FakeClassifier:
     def pick(self, context, question, options):
         assert context == "Payroll email"
         assert question == "What kind of message is this?"
-        assert options == ["Legitimate", "Phishing"]
+        assert len(options) == 2
         return (
-            {"Legitimate": 1.0, "Phishing": 2.0},
-            {"Legitimate": -1.31, "Phishing": -0.31},
-            {"Legitimate": 0.27, "Phishing": 0.73},
+            {options[0]: 1.0, options[1]: 2.0},
+            {options[0]: -1.31, options[1]: -0.31},
+            {options[0]: 0.27, options[1]: 0.73},
         )
 
 
@@ -51,15 +51,46 @@ def test_pick_over_grpc(stub):
 @pytest.mark.parametrize(
     "pick_request",
     [
+        decision_pb2.PickRequest(question="Pick", options=["A", "B"]),
         decision_pb2.PickRequest(question="", options=["A", "B"]),
+        decision_pb2.PickRequest(question="  \n", options=["A", "B"]),
         decision_pb2.PickRequest(question="Pick", options=["A"]),
         decision_pb2.PickRequest(question="Pick", options=["A", "A"]),
+        decision_pb2.PickRequest(question="Pick", options=["A", " \t"]),
+        decision_pb2.PickRequest(question="Pick", options=[str(i) for i in range(27)]),
         decision_pb2.PickRequest(question="Pick", options=["A", "B"], model=99),
     ],
 )
 def test_invalid_request(stub, pick_request):
     with pytest.raises(grpc.RpcError) as exc:
         stub.Pick(pick_request)
+    assert exc.value.code() == grpc.StatusCode.INVALID_ARGUMENT
+
+
+def test_noul_uses_yes_and_no(stub):
+    response = stub.Noul(
+        decision_pb2.NoulRequest(
+            context="Payroll email",
+            question="What kind of message is this?",
+        )
+    )
+    assert isinstance(response, decision_pb2.NoulResponse)
+    assert response.confidence["yes"] == pytest.approx(0.27)
+    assert response.confidence["no"] == pytest.approx(0.73)
+
+
+@pytest.mark.parametrize(
+    "noul_request",
+    [
+        decision_pb2.NoulRequest(question="Pick"),
+        decision_pb2.NoulRequest(question=""),
+        decision_pb2.NoulRequest(question=" \n "),
+        decision_pb2.NoulRequest(question="Pick", model=99),
+    ],
+)
+def test_invalid_noul_request(stub, noul_request):
+    with pytest.raises(grpc.RpcError) as exc:
+        stub.Noul(noul_request)
     assert exc.value.code() == grpc.StatusCode.INVALID_ARGUMENT
 
 

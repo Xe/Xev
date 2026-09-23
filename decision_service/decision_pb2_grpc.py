@@ -19,12 +19,23 @@ class DecisionServiceStub(object):
                 request_serializer=decision__service_dot_decision__pb2.PickRequest.SerializeToString,
                 response_deserializer=decision__service_dot_decision__pb2.PickResponse.FromString,
                 _registered_method=True)
+        self.Noul = channel.unary_unary(
+                '/xeiaso.net.xev.v1.DecisionService/Noul',
+                request_serializer=decision__service_dot_decision__pb2.NoulRequest.SerializeToString,
+                response_deserializer=decision__service_dot_decision__pb2.NoulResponse.FromString,
+                _registered_method=True)
 
 
 class DecisionServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def Pick(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Noul(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -37,6 +48,11 @@ def add_DecisionServiceServicer_to_server(servicer, server):
                     servicer.Pick,
                     request_deserializer=decision__service_dot_decision__pb2.PickRequest.FromString,
                     response_serializer=decision__service_dot_decision__pb2.PickResponse.SerializeToString,
+            ),
+            'Noul': grpc.unary_unary_rpc_method_handler(
+                    servicer.Noul,
+                    request_deserializer=decision__service_dot_decision__pb2.NoulRequest.FromString,
+                    response_serializer=decision__service_dot_decision__pb2.NoulResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -66,6 +82,33 @@ class DecisionService(object):
             '/xeiaso.net.xev.v1.DecisionService/Pick',
             decision__service_dot_decision__pb2.PickRequest.SerializeToString,
             decision__service_dot_decision__pb2.PickResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Noul(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/xeiaso.net.xev.v1.DecisionService/Noul',
+            decision__service_dot_decision__pb2.NoulRequest.SerializeToString,
+            decision__service_dot_decision__pb2.NoulResponse.FromString,
             options,
             channel_credentials,
             insecure,

@@ -7,11 +7,12 @@ import time
 from concurrent import futures
 
 import grpc
+import protovalidate
 from google.protobuf.duration_pb2 import Duration
 from grpc_health.v1 import health, health_pb2, health_pb2_grpc
 
 from decision_service import decision_pb2, decision_pb2_grpc
-from decision_service.classifier import Classifier, LABELS
+from decision_service.classifier import Classifier
 
 SERVICE_NAME = decision_pb2.DESCRIPTOR.services_by_name["DecisionService"].full_name
 
@@ -21,19 +22,30 @@ class DecisionService(decision_pb2_grpc.DecisionServiceServicer):
         self.classifier = classifier or Classifier()
 
     def Pick(self, request, context):
-        if request.model not in (
-            decision_pb2.MODEL_UNSPECIFIED,
-            decision_pb2.MODEL_QWEN3_600M,
-        ):
-            context.abort(grpc.StatusCode.INVALID_ARGUMENT, "Unsupported model")
-        if not request.question.strip():
-            context.abort(grpc.StatusCode.INVALID_ARGUMENT, "question is required")
-        options = list(request.options)
-        if not 2 <= len(options) <= len(LABELS):
-            context.abort(grpc.StatusCode.INVALID_ARGUMENT, "Provide 2 to 26 options")
-        if any(not option.strip() for option in options) or len(set(options)) != len(options):
-            context.abort(grpc.StatusCode.INVALID_ARGUMENT, "Options must be nonempty and unique")
+        try:
+            protovalidate.validate(request)
+        except protovalidate.ValidationError as exc:
+            context.abort(grpc.StatusCode.INVALID_ARGUMENT, str(exc))
+        return self._pick(request, context, decision_pb2.PickResponse)
 
+    def Noul(self, request, context):
+        try:
+            protovalidate.validate(request)
+        except protovalidate.ValidationError as exc:
+            context.abort(grpc.StatusCode.INVALID_ARGUMENT, str(exc))
+        return self._pick(
+            decision_pb2.PickRequest(
+                context=request.context,
+                question=request.question,
+                options=["yes", "no"],
+                model=request.model,
+            ),
+            context,
+            decision_pb2.NoulResponse,
+        )
+
+    def _pick(self, request, context, response_type):
+        options = list(request.options)
         start = time.perf_counter()
         try:
             logits, log_probabilities, confidence = self.classifier.pick(
@@ -44,7 +56,7 @@ class DecisionService(decision_pb2_grpc.DecisionServiceServicer):
         elapsed = time.perf_counter() - start
         duration = Duration()
         duration.FromNanoseconds(round(elapsed * 1_000_000_000))
-        return decision_pb2.PickResponse(
+        return response_type(
             execution_time=duration,
             logits=logits,
             log_probabilities=log_probabilities,

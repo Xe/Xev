@@ -2,10 +2,12 @@ syntax = "proto3";
 
 package xeiaso.net.xev.v1;
 
+import "buf/validate/validate.proto";
 import "google/protobuf/duration.proto";
 
 service DecisionService {
   rpc Pick(PickRequest) returns (PickResponse) {}
+  rpc Noul(NoulRequest) returns (NoulResponse) {}
 }
 
 enum Model {
@@ -14,13 +16,31 @@ enum Model {
 }
 
 message PickRequest {
-  string context = 1;
-  string question = 2;
-  repeated string options = 3;
-  Model model = 4;
+  string context = 1 [(buf.validate.field).string.min_len = 1];
+  string question = 2 [(buf.validate.field).string.pattern = "(?s).*\\S.*"];
+  repeated string options = 3 [
+    (buf.validate.field).repeated.min_items = 2,
+    (buf.validate.field).repeated.max_items = 26,
+    (buf.validate.field).repeated.unique = true,
+    (buf.validate.field).repeated.items.string.pattern = "(?s).*\\S.*"
+  ];
+  Model model = 4 [(buf.validate.field).enum.defined_only = true];
+}
+
+message NoulRequest {
+  string context = 1 [(buf.validate.field).string.min_len = 1];
+  string question = 2 [(buf.validate.field).string.pattern = "(?s).*\\S.*"];
+  Model model = 3 [(buf.validate.field).enum.defined_only = true];
 }
 
 message PickResponse {
+  google.protobuf.Duration execution_time = 1;
+  map<string, float> logits = 2;
+  map<string, float> log_probabilities = 3;
+  map<string, float> confidence = 4;
+}
+
+message NoulResponse {
   google.protobuf.Duration execution_time = 1;
   map<string, float> logits = 2;
   map<string, float> log_probabilities = 3;

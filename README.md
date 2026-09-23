@@ -58,6 +58,11 @@ contains raw `logits`, normalized `log_probabilities`, and `confidence` for the
 options in the request. `execution_time` includes model load time on the first
 request.
 
+Use `Noul` with a `NoulRequest` to score the fixed options `yes` and `no`.
+Its `NoulResponse` has the same fields as `PickResponse`. Both RPCs use
+Protovalidate rules from the protobuf schema. The context must be non-empty.
+Invalid requests return `INVALID_ARGUMENT`.
+
 The model scores one token per option: `A`, `B`, and so on. Confidence values
 sum to one across the supplied options. They are model scores, not measured
 accuracy or calibrated confidence.
