@@ -38,9 +38,11 @@ behind a TLS proxy when clients connect over an untrusted network.
 [`app.yaml`](app.yaml) creates an internal Service on port `50051` with a gRPC
 health check. It mounts a 2 GiB PVC at the Hugging Face model cache path.
 The deployment uses one replica because the PVC uses `ReadWriteOnce` access.
-It does not enable public ingress. Publish the Docker image as
-`ghcr.io/xe/xev:latest` before you apply the manifest, or change `spec.image`
-to the image that you publish.
+It does not enable public ingress. The GitHub Actions workflow publishes
+`ghcr.io/xe/xev:latest` and a commit SHA tag after tests pass on `main`.
+If the GHCR package is private, give the cluster a pull secret before you apply
+the manifest. You can also change `spec.image` to an image that the cluster can
+pull.
 
 The server reports `SERVING` for the empty service name and
 `xeiaso.net.xev.v1.DecisionService`. During shutdown, it reports
