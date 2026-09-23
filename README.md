@@ -40,6 +40,8 @@ health check. It mounts a 2 GiB PVC at the Hugging Face model cache path.
 The deployment uses one replica because the PVC uses `ReadWriteOnce` access.
 It does not enable public ingress. The GitHub Actions workflow publishes
 `ghcr.io/xe/xev:latest` and a commit SHA tag after tests pass on `main`.
+It builds `linux/amd64` and `linux/arm64` on separate native runners, then
+combines their images into one manifest.
 If the GHCR package is private, give the cluster a pull secret before you apply
 the manifest. You can also change `spec.image` to an image that the cluster can
 pull.
