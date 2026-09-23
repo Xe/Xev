@@ -38,7 +38,7 @@ class Classifier:
         prompt = (
             "<|im_start|>system\nChoose one option. Reply with its letter."
             "<|im_end|>\n<|im_start|>user\n"
-            f"Context: {context}\nQuestion: {question}\n\n{choices}"
+            f"{choices}\n\nContext: {context}\nQuestion: {question}"
             "<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
         )
 
